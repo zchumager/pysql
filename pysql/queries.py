@@ -32,14 +32,13 @@ def complex_inner_join(*args) -> list:
     return (list)(filter(lambda record: lambda_expression, cartesian_product))
 
 
-def generate_lamda_expression(expression_list):
+def generate_lamda_expression(expression_list) -> str:
     expression = ""
     limit = len(expression_list) - 1
 
     for index in range(limit):
         expression = expression + f"{expression_list[index]} == {expression_list[index + 1]}"
-        expression = expression + " and "
-    else:
-        expression = expression + f"{expression_list[limit-2]} == {expression_list[limit]}"
+        if index < limit - 1:
+            expression = expression + " and "
 
     return expression
