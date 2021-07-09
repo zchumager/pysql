@@ -9,15 +9,15 @@ def select_user_by_email_domain(users, domain) -> list:
     return list(filter(lambda user: domain in user['email'], users))
 
 
-def inner_join(collection_a, field_collection_a, collection_b, field_collection_b) -> list:
+def inner_join(table_and_field_a, table_and_field_b) -> list:
 
-    cartesian_product = itertools.product(collection_a, collection_b)
+    cartesian_product = itertools.product(table_and_field_a[0], table_and_field_b[0])
 
     '''
         itertools.product returns a list of tuples with all the cartesian product
     '''
     return list(
-        filter(lambda record: record[0][field_collection_a] == record[1][field_collection_b], cartesian_product)
+        filter(lambda record: record[0][table_and_field_a[1]] == record[1][table_and_field_b[1]], cartesian_product)
     )
 
 
@@ -27,8 +27,10 @@ def complex_inner_join(*args):
 
     cartesian_product = itertools.product(collections[0], collections[1], collections[2])
 
+    # creating an array with the elements to be used by the lambda expression below
     lambda_elements = [f"record[{index}]['{args[index][1]}']" for index in range(len(args))]
 
+    # creating the proper expression to be executed by eval fn
     lambda_expression = generate_lambda_expression(lambda_elements)
 
     return (list)(filter(lambda record: eval(lambda_expression), cartesian_product))

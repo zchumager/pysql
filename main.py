@@ -20,7 +20,7 @@ def main():
     pprint(selected_users)
 
     print_separator("inner join")
-    inner_list = inner_join(users, "id", posts, "userId")
+    inner_list = inner_join((users, "id"), (posts, "userId"))
     pprint(inner_list)
 
     print_separator("complex inner join")
