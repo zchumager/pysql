@@ -21,22 +21,25 @@ def inner_join(collection_a, field_collection_a, collection_b, field_collection_
     )
 
 
-def complex_inner_join(*args) -> list:
-    cartesian_product = itertools.product(map(lambda collection: collection[0], args))
+def complex_inner_join(*args):
+    # the map result is being cast because using list() fn transform the needed result
+    collections = (list)(map(lambda collection: collection[0], args))
 
-    #
-    lambda_elements = [f"record[{index}][{args[index][1]}]" for index in range(len(args))]
+    cartesian_product = itertools.product(collections[0], collections[1], collections[2])
+
+    lambda_elements = [f"record[{index}]['{args[index][1]}']" for index in range(len(args))]
 
     lambda_expression = generate_lambda_expression(lambda_elements)
 
-    '''
-    casting the filter result to a list 
-    because list(filter(lambda record: lambda_expression, cartesian_product)) not working
-    '''
-    return (list)(filter(lambda record: lambda_expression, cartesian_product))
+    return (list)(filter(lambda record: eval(lambda_expression), cartesian_product))
 
 
 def generate_lambda_expression(lambda_elements) -> str:
+    '''
+
+    needs to put key inside double quotes
+    '''
+
     expression = ""
     limit = len(lambda_elements) - 1
 
