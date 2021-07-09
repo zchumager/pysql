@@ -24,20 +24,24 @@ def inner_join(collection_a, field_collection_a, collection_b, field_collection_
 def complex_inner_join(*args) -> list:
     cartesian_product = itertools.product(map(lambda collection: collection[0], args))
 
-    expression_list = [f"record[{index}][{args[index][1]}]" for index in range(len(args))]
+    #
+    lambda_elements = [f"record[{index}][{args[index][1]}]" for index in range(len(args))]
 
-    lambda_expression = generate_lamda_expression(expression_list)
+    lambda_expression = generate_lamda_expression(lambda_elements)
 
-    # casting the filter result to a list
+    '''
+    casting the filter result to a list 
+    because list(filter(lambda record: lambda_expression, cartesian_product)) not working
+    '''
     return (list)(filter(lambda record: lambda_expression, cartesian_product))
 
 
-def generate_lamda_expression(expression_list) -> str:
+def generate_lamda_expression(lambda_elements) -> str:
     expression = ""
-    limit = len(expression_list) - 1
+    limit = len(lambda_elements) - 1
 
     for index in range(limit):
-        expression = expression + f"{expression_list[index]} == {expression_list[index + 1]}"
+        expression = expression + f"{lambda_elements[index]} == {lambda_elements[index + 1]}"
         if index < limit - 1:
             expression = expression + " and "
 
