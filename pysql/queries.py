@@ -27,7 +27,7 @@ def complex_inner_join(*args) -> list:
     #
     lambda_elements = [f"record[{index}][{args[index][1]}]" for index in range(len(args))]
 
-    lambda_expression = generate_lamda_expression(lambda_elements)
+    lambda_expression = generate_lambda_expression(lambda_elements)
 
     '''
     casting the filter result to a list 
@@ -36,7 +36,7 @@ def complex_inner_join(*args) -> list:
     return (list)(filter(lambda record: lambda_expression, cartesian_product))
 
 
-def generate_lamda_expression(lambda_elements) -> str:
+def generate_lambda_expression(lambda_elements) -> str:
     expression = ""
     limit = len(lambda_elements) - 1
 
