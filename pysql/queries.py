@@ -22,7 +22,7 @@ def inner_join(collection_a, field_collection_a, collection_b, field_collection_
 
 
 def complex_inner_join(*args):
-    # the map result is being cast because using list() fn transform the needed result
+    # do not use list as fn because it change the nature of expected result
     collections = (list)(map(lambda collection: collection[0], args))
 
     cartesian_product = itertools.product(collections[0], collections[1], collections[2])
